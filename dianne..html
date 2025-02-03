@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Invitation 💝</title>
+    <meta name="theme-color" content="#FF3366">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --primary-color: #FF3366;
+            --secondary-color: #FF85A2;
+        }
+
+        body {
+            font-family: 'Pacifico', cursive;
+            background: linear-gradient(45deg, #FF3366, #FF758C);
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .animation-container {
+            position: relative;
+            height: 200px;
+            margin: 2rem 0;
+        }
+
+        .heart {
+            font-size: 4rem;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary-color);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* Add PWA installation prompt styling */
+        .install-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="animation-container">
+            <div class="heart">💖</div>
+        </div>
+        
+        <h1>Hey [Name],</h1>
+        <p>I have something special planned...</p>
+        <h2>February 15th 🌹</h2>
+        <p>Will you be my Valentine?</p>
+        
+        <button class="cta-button" onclick="showResponse()">Open Invitation</button>
+        
+        <div id="response" class="hidden-response">
+            <p>Dinner under the stars 🌟<br>
+            Your favorite music 🎶<br>
+            Endless conversations 💬</p>
+            <button class="cta-button" onclick="respond(true)">Yes! 💞</button>
+            <button class="cta-button" onclick="respond(false)">I Need More Time</button>
+        </div>
+    </div>
+
+    <script>
+        // PWA Installation
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallPrompt();
+        });
+
+        function showInstallPrompt() {
+            const installBtn = document.createElement('div');
+            installBtn.className = 'install-btn';
+            installBtn.innerHTML = 'Add to Home Screen 📲';
+            installBtn.onclick = installApp;
+            document.body.appendChild(installBtn);
+        }
+
+        async function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('App installed');
+                }
+                deferredPrompt = null;
+            }
+        }
+
+        // App Logic
+        function showResponse() {
+            document.getElementById('response').style.display = 'block';
+            startAnimation();
+        }
+
+        function respond(answer) {
+            if (answer) {
+                window.location.href = 'tel:+YOUR_PHONE_NUMBER'; // Replace with your number
+            } else {
+                document.body.innerHTML = `
+                    <div class="container">
+                        <h2>I'll be patient ⏳</h2>
+                        <p>Text me when you're ready</p>
+                        <div class="heart">💟</div>
+                    </div>
+                `;
+            }
+        }
+
+        function startAnimation() {
+            // Add complex animations here
+        }
+    </script>
+</body>
+</html>
